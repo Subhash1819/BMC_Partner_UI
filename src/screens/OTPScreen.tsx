@@ -52,9 +52,9 @@ const OTPScreen = ({ navigation }: { navigation: OTPScreenNavigationProp }) => {
     <View className="flex-1 p-4">
     <View className="flex flex-col w-full">
       {/* Start */}
-      <TouchableOpacity className="flex flex-row">
-        <Ionicons name="chevron-left" size={20} />
-        <Text className="text-base">Back</Text>
+      <TouchableOpacity className="flex flex-row items-center">
+        <Ionicons name="chevron-left" className="relative" size={26} />
+        <Text className="text-base bottom-[1px]">Back</Text>
       </TouchableOpacity>
       <View className="flex flex-col gap-2 pt-8 pl-2">
         <Text className="text-3xl text-[#6C6A69] font-light">Enter Verification</Text>
