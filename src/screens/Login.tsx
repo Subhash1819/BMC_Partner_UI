@@ -3,21 +3,16 @@ import { Image, View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native-paper';
-import ButtonWithIcon from '../components/ButtonWithIcon';
 import { IMAGE_URLS } from '../common/constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import LinearGradient from 'react-native-linear-gradient';
+import { RootStackNavigation } from '../common/types';
 
-type RootStackParamList = {
-  OTP: undefined;
-  LOGIN: undefined;
-  PARTNER_REGISTRATION:undefined;
-};
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'LOGIN'>;
+type LoginScreenNavigationProp = StackNavigationProp<RootStackNavigation, 'LOGIN'>;
 
 const Login = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
   const [text, setText] = useState<string>('');
-  const [isNumber, setIsNumber] = useState<Boolean>(false);
+  const [isNumber, setIsNumber] = useState<boolean>(false);
   useEffect(() => {
     setIsNumber(text.length === 10 && !isNaN(Number(text))); // True only for 10-digit numbers
   }, [text]);
@@ -29,7 +24,7 @@ const Login = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
     }
   }, []);
   const navigateToOtpScreen = () =>{
-    navigation.navigate('OTP');
+    navigation.navigate('OTP',{otpMode:'login',otpType:'email',otpValue:'jssrsubhash.k@gmail.com'});
   };
   const navigateToPartnerRegistrationScreen = () =>{
     navigation.navigate('PARTNER_REGISTRATION');
@@ -66,13 +61,19 @@ const Login = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
               <View className="border-b border-gray-300 w-20 my-2" />
             </View> */}
             <View className="flex flex-row items-center">
-              <LinearGradient colors={["#9CA3AF", "transparent"]} className="flex-1 h-[1px]" start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} />
+              <LinearGradient colors={['#9CA3AF', 'transparent']} className="flex-1 h-[1px]" start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} />
               <Text className="mx-2 text-sm font-light text-gray-700">Receive OTP Through</Text>
-              <LinearGradient colors={["#9CA3AF", "transparent"]} className="flex-1 h-[1px]" start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} />
+              <LinearGradient colors={['#9CA3AF', 'transparent']} className="flex-1 h-[1px]" start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} />
             </View>
             <View className="flex flex-row justify-evenly">
-              <ButtonWithIcon mode="outlined" category="Ionicons" title="SMS" iconName="android-messages" iconSize={16} buttonColor="#F1FFF3" buttonTextColor="black" />
-              <ButtonWithIcon mode="outlined" category="FontAwesome6" title="Whatsapp" iconName="whatsapp" iconSize={16} buttonColor="#F1FFF3" buttonTextColor="black" />
+              <TouchableOpacity className="flex flex-row border-2 border-slate-200 py-2 px-9 items-center rounded-3xl bg-[#F1FFF3]">
+                <Image source={{uri:IMAGE_URLS.messagesIcon}} className="w-6 h-6"/>
+                <Text className="text-base font-medium pl-2">SMS</Text>
+              </TouchableOpacity>
+              <TouchableOpacity className="flex flex-row border-2 border-slate-200 py-2 px-4 items-center rounded-3xl bg-[#F1FFF3]">
+                <Image source={{uri:IMAGE_URLS.whatsAppIcon}} className="w-8 h-8"/>
+                <Text className="text-base font-medium pl-2">Whatsapp</Text>
+              </TouchableOpacity>
             </View>
           </View>}
       </View>
