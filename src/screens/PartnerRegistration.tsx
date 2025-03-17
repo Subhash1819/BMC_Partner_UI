@@ -104,9 +104,9 @@ const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavi
     <View className="flex-1 p-4">
       <View className="flex flex-col w-full">
         {/* Back Button */}
-        <TouchableOpacity className="flex flex-row">
-          <Ionicons name="chevron-left" size={20} />
-          <Text className="text-base">Back</Text>
+        <TouchableOpacity className="flex flex-row items-center">
+          <Ionicons className="relative" name="chevron-left" size={26} />
+          <Text className="text-base bottom-[1px]">Back</Text>
         </TouchableOpacity>
 
         {/* Header */}

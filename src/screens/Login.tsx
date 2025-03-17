@@ -6,6 +6,7 @@ import { Button } from 'react-native-paper';
 import ButtonWithIcon from '../components/ButtonWithIcon';
 import { IMAGE_URLS } from '../common/constants';
 import { StackNavigationProp } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
 
 type RootStackParamList = {
   OTP: undefined;
@@ -59,10 +60,15 @@ const Login = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
         </View>
         {isNumber &&
           <View className="flex flex-col gap-2">
-            <View className="flex flex-row gap-4">
+            {/* <View className="flex flex-row gap-4">
               <View className="border-b border-gray-300 my-2 w-20" />
               <Text className="text-center text-sm font-light text-[#404040]">Recieve OTP Through</Text>
               <View className="border-b border-gray-300 w-20 my-2" />
+            </View> */}
+            <View className="flex flex-row items-center">
+              <LinearGradient colors={["#9CA3AF", "transparent"]} className="flex-1 h-[1px]" start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} />
+              <Text className="mx-2 text-sm font-light text-gray-700">Receive OTP Through</Text>
+              <LinearGradient colors={["#9CA3AF", "transparent"]} className="flex-1 h-[1px]" start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} />
             </View>
             <View className="flex flex-row justify-evenly">
               <ButtonWithIcon mode="outlined" category="Ionicons" title="SMS" iconName="android-messages" iconSize={16} buttonColor="#F1FFF3" buttonTextColor="black" />
