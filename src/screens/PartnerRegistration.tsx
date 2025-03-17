@@ -1,65 +1,19 @@
-// import React from 'react';
-// import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-// import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
-// import { Button } from 'react-native-paper';
-// import { REGISTRATION_FORM } from '../common/constants';
-
-// const PartnerRegistrationScreen = () => {
-//   return (
-//     <View className="flex-1 p-4">
-//       <View className="flex flex-col w-full">
-//         {/* Start */}
-//         <TouchableOpacity className="flex flex-row">
-//           <Ionicons name="chevron-left" size={20} />
-//           <Text className="text-base">Back</Text>
-//         </TouchableOpacity>
-//         <View className="flex flex-col gap-2 pl-2 py-8">
-//           <Text className="text-3xl text-[#6C6A69] font-light">Register as</Text>
-//           <Text className="text-3xl text-[#FE6D00] font-extrabold">Service Partner</Text>
-//         </View>
-//         <View className="flex flex-col gap-4">
-//           {REGISTRATION_FORM.map((input) =>
-//             <View className="gap-2">
-//               <Text className="text-base font-normal text-[#1E1E1E]">{input.name}</Text>
-//               <TextInput
-//                 placeholder={input.placeholder}
-//                 className="p-3 border-2 border-slate-200 rounded-lg h-12"
-//               />
-//             </View>
-//           )}
-//         </View>
-//         <View className="flex flex-row gap-1 justify-center pt-8">
-//           <Text className="text-sm font-normal">Already have an account? </Text><TouchableOpacity><Text className="text-[#FE6D00] text-sm">Sign In</Text></TouchableOpacity>
-//         </View>
-//         <View className="px-4 pt-8">
-//           <Button mode={'contained'} buttonColor="#FE6D00">
-//             Register
-//           </Button>
-//         </View>
-//       </View>
-//     </View>
-//   );
-// };
-
-// export default PartnerRegistrationScreen;
-type RootStackParamList = {
-  OTP: undefined;
-  LOGIN: undefined;
-  PARTNER_REGISTRATION:undefined;
-};
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PARTNER_REGISTRATION'>;
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Button } from 'react-native-paper';
 import { REGISTRATION_FORM } from '../common/constants';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackNavigation } from '../common/types';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavigationProp }) => {
+type PartRegistrationScreenNavigationProp = StackNavigationProp<RootStackNavigation, 'OTP'>;
+
+const PartnerRegistrationScreen = ({ navigation }: { navigation: PartRegistrationScreenNavigationProp }) => {
   // State for form inputs & errors
   const [formData, setFormData] = useState(
     REGISTRATION_FORM.reduce(
-      (values, field) => ({ ...values, [field.id]: "" }),
+      (values, field) => ({ ...values, [field.id]: '' }),
       {} as Record<string, string>
     )
   );
@@ -72,7 +26,7 @@ const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavi
 
     // Clear error when user starts typing
     if (errors[fieldId]) {
-      setErrors((prevErrors) => ({ ...prevErrors, [fieldId]: "" }));
+      setErrors((prevErrors) => ({ ...prevErrors, [fieldId]: '' }));
     }
   };
 
@@ -95,16 +49,17 @@ const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavi
   // Handle form submission
   const handleSubmit = () => {
     if (validateForm()) {
-      Alert.alert("Success", "Registration successful!");
-      console.log("Form Submitted", formData);
+      Alert.alert('Success', 'Registration successful!');
+      console.log('Form Submitted', formData);
+      navigation.navigate('REGISTRATION_OTP_SCREEN');
     }
   };
 
   return (
-    <View className="flex-1 p-4">
+    <ScrollView className="flex-1 p-4">
       <View className="flex flex-col w-full">
         {/* Back Button */}
-        <TouchableOpacity className="flex flex-row items-center">
+        <TouchableOpacity className="flex flex-row items-center" onPress={()=>navigation.navigate('LOGIN')}>
           <Ionicons className="relative" name="chevron-left" size={26} />
           <Text className="text-base bottom-[1px]">Back</Text>
         </TouchableOpacity>
@@ -133,7 +88,7 @@ const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavi
 
         {/* Submit Button */}
         <View className="px-4 pt-8">
-          <Button mode={"contained"} buttonColor="#FE6D00" onPress={handleSubmit}>
+          <Button mode={'contained'} buttonColor="#FE6D00" onPress={handleSubmit}>
             Register
           </Button>
         </View>
@@ -141,12 +96,12 @@ const PartnerRegistrationScreen = ({ navigation }: { navigation: LoginScreenNavi
         {/* Sign In Link */}
         <View className="flex flex-row gap-1 justify-center pt-8">
           <Text className="text-sm font-normal">Already have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('LOGIN')}>
             <Text className="text-[#FE6D00] text-sm">Sign In</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

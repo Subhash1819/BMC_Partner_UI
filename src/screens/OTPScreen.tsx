@@ -3,26 +3,32 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { OTP } from '../common/constants';
 import { StackNavigationProp } from '@react-navigation/stack';
-type RootStackParamList = {
-  OTP: undefined;
-  LOGIN: undefined;
-  PARTNER_REGISTRATION:undefined;
-};
-type OTPScreenNavigationProp = StackNavigationProp<RootStackParamList, 'OTP'>;
+import { RootStackNavigation } from '../common/types';
+import { RouteProp } from '@react-navigation/native';
 
-const OTPScreen = ({ navigation }: { navigation: OTPScreenNavigationProp }) => {
+type OTPScreenNavigationProp = StackNavigationProp<RootStackNavigation, 'OTP'>;
+type OTPScreenRouteProp = RouteProp<RootStackNavigation, 'OTP'>;
+
+const OTPScreen = ({ route,navigation }: { route:OTPScreenRouteProp,navigation: OTPScreenNavigationProp }) => {
+  const {otpMode, otpType, otpValue} = route.params;
   const [otp, setOtp] = useState<string[]>(Array(OTP.OTP_LENGTH).fill('')); // For 4-digit OTP
   const inputsRef = useRef<(TextInput | null)[] >([]);
   const [timeLeft, setTimeLeft] = useState<number>(OTP.OTP_EXPIRY_TIMEOUT);
   const [isExpired, setIsExpired] = useState(false);
 
-  const handleChange = (value, index:number) => {
+  const handleChange = (value:string, index:number) => {
     let newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
     if (value && index < otp.length - 1) {
       inputsRef.current[index + 1]?.focus();
+    }
+    const enteredOTP = newOtp.join('');
+    if (otpMode === 'login' && enteredOTP.length === OTP.OTP_LENGTH) {
+      navigation.navigate('SUCCESS_SCREENS',{otpMode:'login',type:'OTP_VERIFICATION_SUCCESS'});
+    }else if(otpMode === 'registration' && enteredOTP.length === OTP.OTP_LENGTH){
+      navigation.navigate('SUCCESS_SCREENS',{otpMode:'registration',type:'REGISTRATION_SUCCESS'});
     }
   };
 
@@ -52,7 +58,7 @@ const OTPScreen = ({ navigation }: { navigation: OTPScreenNavigationProp }) => {
     <View className="flex-1 p-4">
     <View className="flex flex-col w-full">
       {/* Start */}
-      <TouchableOpacity className="flex flex-row items-center">
+      <TouchableOpacity className="flex flex-row items-center" onPress={()=>navigation.navigate('LOGIN')}>
         <Ionicons name="chevron-left" className="relative" size={26} />
         <Text className="text-base bottom-[1px]">Back</Text>
       </TouchableOpacity>
@@ -61,7 +67,7 @@ const OTPScreen = ({ navigation }: { navigation: OTPScreenNavigationProp }) => {
         <Text className="text-3xl text-[#FE6D00] font-extrabold">Code</Text>
       </View>
       <View className="pt-4 pl-2">
-        <Text className="text-[#404040] font-light">We have sent a verification code to your email jssrsubhash.k@gmail.com </Text>
+        <Text className="text-[#404040] font-light">We have sent a verification code to your {otpType} {otpValue} </Text>
       </View>
       </View>
       {/* Center */}
